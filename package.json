@@ -1,0 +1,16 @@
+{
+  "name": "vivtron-unified-platform",
+  "version": "1.0.0",
+  "description": "Vivtron Unified Platform (EV + EVCS) with Role-Based Dashboards and Authentication",
+  "scripts": {
+    "dev": "concurrently -n \"SERVER,CLIENT\" -c \"blue,cyan\" \"npm run dev:server\" \"npm run dev:client\"",
+    "dev:server": "npm --prefix server run dev",
+    "dev:client": "npm --prefix client run dev",
+    "build": "npm --prefix client run build",
+    "seed": "npm --prefix server run seed",
+    "start": "npm --prefix server run start"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}
