@@ -12,9 +12,11 @@ server/.env
 client/dist/
 dist/
 
-# SQLite temp files
+# SQLite db & temp files
+server/src/db/*.db
 server/src/db/*.db-shm
 server/src/db/*.db-wal
+*.db
 .git_client_backup/
 client/.git_client_backup/
 
