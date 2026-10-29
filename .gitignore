@@ -1,0 +1,29 @@
+# Dependencies
+node_modules/
+client/node_modules/
+server/node_modules/
+
+# Environment files
+server/.env
+.env
+.env.local
+
+# Build output
+client/dist/
+dist/
+
+# SQLite temp files
+server/src/db/*.db-shm
+server/src/db/*.db-wal
+.git_client_backup/
+client/.git_client_backup/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS & Editor
+.DS_Store
+Thumbs.db

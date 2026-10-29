@@ -2,6 +2,7 @@ import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
 import { initDatabase } from './config/db.js';
+import { connectMongoDB } from './config/mongodb.js';
 import authRoutes from './routes/auth.routes.js';
 import adminRoutes from './routes/admin.routes.js';
 import employeeRoutes from './routes/employee.routes.js';
@@ -9,6 +10,9 @@ import publicRoutes from './routes/public.routes.js';
 
 // Initialize SQLite database
 initDatabase();
+
+// Connect to MongoDB Atlas (if configured)
+connectMongoDB();
 
 const app = express();
 const PORT = process.env.PORT || 5000;

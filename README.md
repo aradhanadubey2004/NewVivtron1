@@ -1,6 +1,6 @@
 # Vivtron Unified Platform (EV + EVCS)
 
-A modern, responsive full-stack platform for **Vivtron (A Unit of Vivan Group)** combining two distinct divisions:
+A modern, responsive full-stack platform for **Vivtron** combining two distinct divisions:
 1. **EV (Electric Vehicles)**: Indigenous electric scooters, commercial cargo vehicles, and passenger auto-rickshaws carrying the spirit of Bharat.
 2. **EVCS (Electric Vehicle Charging Solutions)**: Mission-critical EV charging infrastructure with turnkey EPC, cloud NOC telemetry, and role-based operational dashboards.
 
@@ -25,7 +25,7 @@ A modern, responsive full-stack platform for **Vivtron (A Unit of Vivan Group)**
   - **LOADEX**: Heavy-duty commercial cargo vehicle with 250+ kg payload capacity.
   - **NEXO AUTO**: Fully automatic electric passenger auto-rickshaw (e-rickshaw).
 - **Genuine OEM Powertrain Components**: Smart Battery Management System (BMS), Intelligent Fast Chargers, and BLDC Motors.
-- **Corporate Heritage**: Unit of Vivan Group (Est. 2016), Noida Corporate Headquarters details, phone hotlines, and test ride / dealership inquiry portal.
+- **Corporate Heritage**: Est. 2016, Noida Corporate Headquarters details, phone hotlines, and test ride / dealership inquiry portal.
 
 ### 3. EVCS Division (`/evcs/*`)
 - **Dedicated Public Pages**: Home, About Us, Charging Solutions, Products, Services, Contact Us, Login, and Back to Main Home.
@@ -132,7 +132,7 @@ node src/test-api.js
 
 ## 🏢 Corporate Contact Information
 
-- **Company**: Vivtron (A Unit of Vivan Group)
+- **Company**: Vivtron Motors Pvt. Ltd.
 - **Head Office**: G-71, Sector-63, Noida, Uttar Pradesh - 201301, India
 - **Phone**: 0120-4144584 / +91 8929933680
 - **Email**: info@vivtron.in
