@@ -97,7 +97,7 @@ export const EmployeeLayout: React.FC<{
                   <span className="font-extrabold text-white text-sm sm:text-base tracking-wide font-heading leading-tight truncate">
                     VIVTRON EVCS
                   </span>
-                  <span className="text-[9px] font-mono font-bold text-emerald-400 uppercase tracking-wider">
+                  <span className="text-[10px] font-bold text-emerald-400 uppercase tracking-wider font-sans">
                     Member Portal
                   </span>
                 </div>
@@ -109,7 +109,7 @@ export const EmployeeLayout: React.FC<{
               title={collapsed ? 'Expand Menu' : 'Collapse Menu'}
               className="text-slate-300 hover:text-white p-1.5 rounded-lg hover:bg-white/10 transition cursor-pointer shrink-0 ml-1"
             >
-              <span className="text-base font-bold leading-none select-none">
+              <span className="text-base font-bold leading-none select-none font-sans">
                 {collapsed ? '»' : '«'}
               </span>
             </button>
@@ -117,12 +117,12 @@ export const EmployeeLayout: React.FC<{
         </div>
 
         {/* Scrollable Middle: Navigation Links (Independently scrollable) */}
-        <div className="flex-1 overflow-y-auto px-3.5 py-3 space-y-1 dark-scrollbar min-h-0">
+        <div className="flex-1 overflow-y-auto px-3.5 py-3 space-y-1 dark-scrollbar min-h-0 font-sans">
           {/* WORKSPACE Category Header */}
-          <div className="mb-2">
+          <div className="mb-2 font-sans">
             {!collapsed ? (
               <div className="px-2 pt-1 pb-1">
-                <span className="text-[11px] font-bold text-[#6D95DB] uppercase tracking-wider font-mono">
+                <span className="text-[11px] font-bold text-[#6D95DB] uppercase tracking-wider font-sans">
                   WORKSPACE
                 </span>
                 <div className="w-14 h-[2px] bg-[#1E60D5] rounded-full mt-1 mb-1"></div>
@@ -247,9 +247,9 @@ export const EmployeeLayout: React.FC<{
       </aside>
 
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col h-full min-w-0 overflow-hidden">
+      <div className="flex-1 flex flex-col h-full min-w-0 overflow-hidden font-sans">
         {/* Top Header matching reference styling */}
-        <header className="bg-white border-b border-slate-200/90 px-4 sm:px-8 py-3.5 sm:py-4 shrink-0 z-30 shadow-2xs">
+        <header className="bg-white border-b border-slate-200/90 px-4 sm:px-8 py-3.5 sm:py-4 shrink-0 z-30 shadow-2xs font-sans">
           <div className="flex items-center justify-between gap-4">
             {/* Left: Mobile Toggle & Page Title */}
             <div className="flex items-center gap-4">
@@ -261,7 +261,7 @@ export const EmployeeLayout: React.FC<{
                 {sidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
               </button>
 
-              <h1 className="text-xl sm:text-2xl font-extrabold text-[#0A1D37] font-heading tracking-tight leading-tight">
+              <h1 className="text-xl sm:text-2xl font-bold text-[#0A1D37] font-sans tracking-tight leading-tight">
                 {pageTitle || 'Dashboard'}
               </h1>
             </div>

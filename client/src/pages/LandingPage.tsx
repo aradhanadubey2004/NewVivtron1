@@ -55,9 +55,14 @@ export const LandingPage: React.FC = () => {
       <main className="flex-1 flex flex-col justify-center py-8 sm:py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           {/* Main Requested Heading */}
-          <h1 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-[#101828] dark:text-white max-w-3xl mx-auto leading-tight font-heading mb-6 sm:mb-8">
-            Powered By Navodaya Growth Pvt. Ltd.
-          </h1>
+          <div className="max-w-4xl mx-auto mb-6 sm:mb-8">
+            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-[#101828] dark:text-white font-heading">
+              Vivtron Group
+            </h1>
+            <p className="mt-2 sm:mt-3 text-lg sm:text-2xl lg:text-3xl font-bold text-slate-600 dark:text-slate-300 font-heading">
+              Powered By Navodaya Growth Pvt. Ltd.
+            </p>
+          </div>
 
           {/* TWO COMPACT INTERACTIVE CARDS */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 max-w-2xl mx-auto">
@@ -127,7 +132,7 @@ export const LandingPage: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 dark:text-slate-400 gap-3">
           <div className="flex items-center gap-2">
             <img src="/images/vivtron-ve-logo.png" alt="Vivtron" className="h-7 w-auto object-contain" />
-            <span className="font-semibold text-slate-700 dark:text-slate-300">Powered By Navodaya Growth Pvt. Ltd.</span>
+            <span className="font-semibold text-slate-700 dark:text-slate-300">Vivtron Group • Powered By Navodaya Growth Pvt. Ltd.</span>
           </div>
           <p>© {new Date().getFullYear()} Vivtron. All rights reserved.</p>
         </div>

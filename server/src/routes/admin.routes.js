@@ -90,10 +90,19 @@ router.post('/employees', async (req, res) => {
       return res.status(400).json({ success: false, message: 'An account with this email address already exists.' });
     }
 
-    // Generate automatic employee ID if not provided
-    const lastUser = db.prepare('SELECT id FROM users ORDER BY id DESC LIMIT 1').get();
-    const nextNum = (lastUser ? lastUser.id + 1 : 1).toString().padStart(3, '0');
-    const employee_id = role === 'Admin' ? `VIV-ADM-${nextNum}` : `VIV-EMP-${nextNum}`;
+    // Generate automatic employee ID if not provided or use provided
+    let finalEmployeeId = req.body.employee_id ? req.body.employee_id.trim().toUpperCase() : '';
+    if (!finalEmployeeId) {
+      const lastEmp = db.prepare("SELECT id FROM users WHERE role = 'Employee' ORDER BY id DESC LIMIT 1").get();
+      const nextNum = (lastEmp ? lastEmp.id + 101 : 101).toString();
+      finalEmployeeId = role === 'Admin' ? `VIV-ADM-${nextNum}` : `VIV-EMP-${nextNum}`;
+    }
+
+    // Check employee_id uniqueness
+    const existingId = db.prepare('SELECT id FROM users WHERE UPPER(employee_id) = UPPER(?)').get(finalEmployeeId);
+    if (existingId) {
+      finalEmployeeId = `${finalEmployeeId}-${Date.now().toString().slice(-3)}`;
+    }
 
     const salt = await bcrypt.genSalt(10);
     const password_hash = await bcrypt.hash(password, salt);
@@ -103,21 +112,68 @@ router.post('/employees', async (req, res) => {
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'Active')
     `);
 
-    stmt.run(employee_id, name.trim(), email.trim(), password_hash, role, designation || '', department || '', phone || '');
+    const info = stmt.run(finalEmployeeId, name.trim(), email.trim(), password_hash, role, designation || '', department || '', phone || '');
 
     // Log activity
     db.prepare(`
       INSERT INTO activities (user_id, action, details)
       VALUES (?, 'Create Employee', ?)
-    `).run(req.user.id, `Created new employee profile: ${name} (${employee_id}) with role ${role}.`);
+    `).run(req.user.id, `Admin registered new employee profile: ${name} (${finalEmployeeId}) with role ${role}.`);
 
     return res.status(201).json({
       success: true,
-      message: `Employee ${name} (${employee_id}) created successfully.`
+      message: `Employee ${name} (${finalEmployeeId}) registered successfully by Admin.`,
+      user: {
+        id: Number(info.lastInsertRowid),
+        employee_id: finalEmployeeId,
+        name: name.trim(),
+        email: email.trim(),
+        role,
+        designation: designation || '',
+        department: department || '',
+        phone: phone || '',
+        status: 'Active'
+      }
     });
   } catch (error) {
     console.error('Create employee error:', error);
     return res.status(500).json({ success: false, message: 'Failed to create employee account.' });
+  }
+});
+
+// Admin Reset Employee Password
+router.post('/employees/:id/reset-password', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { newPassword } = req.body;
+
+    if (!newPassword || newPassword.trim().length < 6) {
+      return res.status(400).json({ success: false, message: 'Password must be at least 6 characters long.' });
+    }
+
+    const user = db.prepare('SELECT id, name, employee_id, email FROM users WHERE id = ?').get(id);
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'Employee not found.' });
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const password_hash = await bcrypt.hash(newPassword.trim(), salt);
+
+    db.prepare('UPDATE users SET password_hash = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?')
+      .run(password_hash, id);
+
+    db.prepare(`
+      INSERT INTO activities (user_id, action, details)
+      VALUES (?, 'Admin Reset Password', ?)
+    `).run(req.user.id, `Admin reset login password for employee ${user.name} (${user.employee_id}).`);
+
+    return res.json({
+      success: true,
+      message: `Login password for ${user.name} (${user.employee_id}) has been updated successfully.`
+    });
+  } catch (error) {
+    console.error('Reset password error:', error);
+    return res.status(500).json({ success: false, message: 'Failed to reset employee password.' });
   }
 });
 

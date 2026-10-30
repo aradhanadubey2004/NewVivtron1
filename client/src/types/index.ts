@@ -41,6 +41,7 @@ export interface Product {
   stock_status: 'In Stock' | 'Pre-Order' | 'Built to Order';
   description?: string;
   specs?: string | Record<string, string>;
+  image?: string;
   created_at?: string;
 }
 

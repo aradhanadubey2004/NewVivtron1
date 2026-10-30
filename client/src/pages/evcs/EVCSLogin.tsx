@@ -383,6 +383,15 @@ export const EVCSLogin: React.FC<EVCSLoginProps> = ({ initialMode }) => {
                 </h2>
               </div>
 
+              {/* Staff & Employee Provisioning Notice */}
+              <div className="mb-4 p-2.5 rounded-xl bg-blue-50/80 border border-blue-200/80 text-[11px] text-slate-700 flex items-start gap-2">
+                <ShieldCheck className="w-4 h-4 text-[#082B59] shrink-0 mt-0.5" />
+                <div className="leading-tight">
+                  <span className="font-bold text-[#082B59]">Employee & Staff Login: </span>
+                  Accounts are registered by the Administrator. Sign in using your assigned Employee ID or Email and Password.
+                </div>
+              </div>
+
               {/* Error or Success Alert */}
               {errorMessage && (
                 <div className="mb-4 p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs flex items-start gap-2">
@@ -408,8 +417,8 @@ export const EVCSLogin: React.FC<EVCSLoginProps> = ({ initialMode }) => {
                       required
                       value={identifier}
                       onChange={(e) => setIdentifier(e.target.value)}
-                      placeholder="Login ID"
-                      className="w-full bg-transparent text-sm sm:text-base text-slate-900 placeholder-slate-400 outline-none"
+                      placeholder="Email or Employee ID (e.g. employee@vivtron.com or VIV-EMP-101)"
+                      className="w-full bg-transparent text-xs sm:text-sm text-slate-900 placeholder-slate-400 outline-none"
                     />
                   </div>
                 </div>
@@ -633,12 +642,21 @@ export const EVCSLogin: React.FC<EVCSLoginProps> = ({ initialMode }) => {
           className="bg-white rounded-3xl shadow-2xl border border-slate-200/90 p-8 sm:p-10 max-w-md w-full"
         >
           {/* Centered Logo at top */}
-          <div className="flex flex-col items-center mb-6">
+          <div className="flex flex-col items-center mb-4">
             <img
               src="/images/vivtron-ve-logo.png"
               alt="Vivtron EVCS Logo"
               className="h-14 w-auto object-contain mb-2"
             />
+          </div>
+
+          {/* Admin Provisioning Alert for Staff */}
+          <div className="mb-4 p-3 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-xs flex items-start gap-2.5">
+            <AlertCircle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+            <div className="leading-relaxed">
+              <span className="font-bold">Staff & Employee Notice: </span>
+              Employee accounts are registered strictly by the Administrator via the Admin Panel. If you are an employee, contact your Admin to get your Login ID and password.
+            </div>
           </div>
 
           {/* Error Message */}

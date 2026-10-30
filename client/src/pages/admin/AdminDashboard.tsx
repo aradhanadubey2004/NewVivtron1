@@ -108,7 +108,7 @@ export const AdminDashboard: React.FC = () => {
 
   return (
     <AdminLayout>
-      <div className="space-y-6 sm:space-y-8 max-w-7xl mx-auto">
+      <div className="space-y-6 sm:space-y-8 max-w-7xl mx-auto font-sans">
         {/* ROW 1: THE TWO HERO CARDS MATCHING REFERENCE SCREENSHOT */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* CARD 1 (LEFT): WELCOME HERO BANNER */}
@@ -121,16 +121,16 @@ export const AdminDashboard: React.FC = () => {
             />
 
             <div className="space-y-3 relative z-10">
-              <span className="text-[11px] font-bold text-slate-400 uppercase tracking-widest font-mono">
+              <span className="text-[11px] font-black text-slate-500 uppercase tracking-widest font-sans">
                 DASHBOARD
               </span>
 
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#0A1D37] font-heading leading-tight tracking-tight">
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-[#0A1D37] font-sans leading-tight tracking-tight">
                 Welcome, <br />
                 <span className="text-[#2EB85C] block mt-0.5">{companyName}</span>
               </h2>
 
-              <p className="text-xs sm:text-sm text-slate-500 font-medium">
+              <p className="text-xs sm:text-sm text-slate-600 font-bold font-sans">
                 Welcome back! Have a productive day.
               </p>
             </div>
@@ -138,15 +138,15 @@ export const AdminDashboard: React.FC = () => {
             {/* Bottom Row inside Welcome Card */}
             <div className="pt-6 sm:pt-8 mt-6 border-t border-slate-100 flex items-center justify-between gap-4 relative z-10">
               <div>
-                <span className="text-[11px] font-medium text-slate-400 block mb-0.5">Wallet</span>
-                <span className="text-xl sm:text-2xl font-black text-[#0A1D37] font-heading">
+                <span className="text-[11px] font-bold text-slate-500 block mb-0.5 font-sans">Wallet</span>
+                <span className="text-xl sm:text-2xl font-black text-[#0A1D37] font-sans">
                   ₹0.00
                 </span>
               </div>
 
               <div className="text-right">
-                <span className="text-[11px] font-medium text-slate-400 block mb-0.5">Rank</span>
-                <span className="text-sm sm:text-base font-extrabold text-[#2EB85C] bg-[#EAF3E5] px-3 py-1 rounded-full border border-[#2EB85C]/20">
+                <span className="text-[11px] font-bold text-slate-500 block mb-0.5 font-sans">Rank</span>
+                <span className="text-sm sm:text-base font-extrabold text-[#2EB85C] bg-[#EAF3E5] px-3.5 py-1 rounded-full border border-[#2EB85C]/30 font-sans shadow-2xs">
                   Pre Sales Executive
                 </span>
               </div>
@@ -154,30 +154,30 @@ export const AdminDashboard: React.FC = () => {
           </div>
 
           {/* CARD 2 (RIGHT): REFERRAL DETAILS CARD */}
-          <div className="lg:col-span-5 rounded-[26px] bg-white border border-slate-200/90 shadow-sm p-6 sm:p-8 flex flex-col justify-between">
+          <div className="lg:col-span-5 rounded-[26px] bg-white border border-slate-200/90 shadow-sm p-6 sm:p-8 flex flex-col justify-between font-sans">
             <div>
               {/* Header with Active Pill */}
               <div className="flex items-center justify-between mb-5">
-                <h3 className="text-lg sm:text-xl font-bold text-[#0A1D37] font-heading">
+                <h3 className="text-lg sm:text-xl font-black text-[#0A1D37] font-sans">
                   Referral Details
                 </h3>
-                <span className="px-3 py-0.5 rounded-full bg-[#EAF3E5] text-[#2EB85C] text-xs font-bold font-mono tracking-wide">
+                <span className="px-3 py-0.5 rounded-full bg-[#EAF3E5] text-[#2EB85C] text-xs font-black font-sans tracking-wide">
                   Active
                 </span>
               </div>
 
               {/* Referral Code Row */}
               <div className="mb-4">
-                <span className="text-xs text-slate-400 block mb-1 font-medium">Referral Code</span>
+                <span className="text-xs text-slate-500 block mb-1 font-bold font-sans">Referral Code</span>
                 <div className="flex items-center justify-between gap-3 bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5">
-                  <span className="text-xl sm:text-2xl font-black text-[#0A1D37] font-mono tracking-wider">
+                  <span className="text-xl sm:text-2xl font-black text-[#0A1D37] font-sans tracking-wide">
                     {referralCode}
                   </span>
                   <button
                     onClick={handleCopyCode}
-                    className="px-4 py-2 rounded-xl bg-[#081E3E] hover:bg-[#06152B] hover:shadow-lg hover:shadow-[#081E3E]/30 text-white text-xs font-bold transition-all duration-200 hover:scale-105 hover:-translate-y-0.5 active:scale-95 flex items-center gap-1.5 cursor-pointer shadow-xs"
+                    className="px-4 py-2 rounded-xl bg-[#081E3E] hover:bg-[#06152B] hover:shadow-lg hover:shadow-[#081E3E]/30 text-white text-xs font-black transition-all duration-200 hover:scale-105 hover:-translate-y-0.5 active:scale-95 flex items-center gap-1.5 cursor-pointer shadow-xs font-sans"
                   >
-                    {codeCopied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                    {codeCopied ? <Check className="w-3.5 h-3.5 text-emerald-400 stroke-[3]" /> : <Copy className="w-3.5 h-3.5" />}
                     <span>{codeCopied ? 'Copied' : 'Copy Code'}</span>
                   </button>
                 </div>
@@ -185,16 +185,16 @@ export const AdminDashboard: React.FC = () => {
 
               {/* Referral Link Row */}
               <div className="mb-5">
-                <span className="text-xs text-slate-400 block mb-1 font-medium">Referral Link</span>
+                <span className="text-xs text-slate-500 block mb-1 font-bold font-sans">Referral Link</span>
                 <div className="flex items-center gap-2">
-                  <div className="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-mono text-slate-600 truncate select-all focus-within:border-[#2EB85C]">
+                  <div className="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-sans font-bold text-slate-700 truncate select-all focus-within:border-[#2EB85C]">
                     {referralLink}
                   </div>
                   <button
                     onClick={handleCopyLink}
-                    className="px-4 py-2 rounded-xl bg-[#2EB85C] hover:bg-[#28A745] hover:shadow-lg hover:shadow-[#2EB85C]/40 text-white text-xs font-bold transition-all duration-200 hover:scale-105 hover:-translate-y-0.5 active:scale-95 flex items-center gap-1.5 cursor-pointer shadow-xs shrink-0"
+                    className="px-4 py-2 rounded-xl bg-[#2EB85C] hover:bg-[#28A745] hover:shadow-lg hover:shadow-[#2EB85C]/40 text-white text-xs font-black transition-all duration-200 hover:scale-105 hover:-translate-y-0.5 active:scale-95 flex items-center gap-1.5 cursor-pointer shadow-xs shrink-0 font-sans"
                   >
-                    {linkCopied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+                    {linkCopied ? <Check className="w-3.5 h-3.5 stroke-[3]" /> : <Copy className="w-3.5 h-3.5" />}
                     <span>{linkCopied ? 'Done' : 'Copy'}</span>
                   </button>
                 </div>
@@ -202,16 +202,16 @@ export const AdminDashboard: React.FC = () => {
             </div>
 
             {/* Bottom Stats Row */}
-            <div className="pt-4 border-t border-slate-100 grid grid-cols-2 gap-4 text-center">
+            <div className="pt-4 border-t border-slate-100 grid grid-cols-2 gap-4 text-center font-sans">
               <div>
-                <span className="text-xs text-slate-500 font-medium block">Direct Referrals</span>
-                <span className="text-2xl font-extrabold text-[#2EB85C] font-heading mt-0.5 block">
+                <span className="text-xs text-slate-600 font-bold block font-sans">Direct Referrals</span>
+                <span className="text-2xl sm:text-3xl font-black text-[#2EB85C] font-sans mt-0.5 block">
                   2
                 </span>
               </div>
               <div>
-                <span className="text-xs text-slate-500 font-medium block">Team Size</span>
-                <span className="text-2xl font-extrabold text-[#0A1D37] font-heading mt-0.5 block">
+                <span className="text-xs text-slate-600 font-bold block font-sans">Team Size</span>
+                <span className="text-2xl sm:text-3xl font-black text-[#0A1D37] font-sans mt-0.5 block">
                   43
                 </span>
               </div>
@@ -220,17 +220,17 @@ export const AdminDashboard: React.FC = () => {
         </div>
 
         {/* ROW 2: THE 6 METRIC STATS CARDS MATCHING REFERENCE SCREENSHOT 3 & 4 */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 font-sans">
           {/* Stat 1: Total Income */}
           <div className="p-5 sm:p-6 rounded-2xl bg-white border border-slate-200/90 shadow-sm hover:shadow-xl hover:border-slate-300 hover:-translate-y-1 transition-all duration-300 flex items-center justify-between group cursor-default">
             <div>
-              <span className="text-xs font-bold text-slate-500 uppercase tracking-wider block mb-1">
+              <span className="text-xs font-black text-slate-500 uppercase tracking-wider block mb-1 font-sans">
                 Total Income
               </span>
-              <div className="text-2xl sm:text-3xl font-black text-[#0A1D37] font-heading">
+              <div className="text-3xl sm:text-4xl font-black text-[#0A1D37] font-sans tracking-tight">
                 ₹0
               </div>
-              <span className="text-xs font-semibold text-slate-500 mt-1 block">
+              <span className="text-xs font-bold text-slate-600 mt-1 block font-sans">
                 Total Earnings
               </span>
             </div>
@@ -244,13 +244,13 @@ export const AdminDashboard: React.FC = () => {
           {/* Stat 2: Wallet Balance */}
           <div className="p-5 sm:p-6 rounded-2xl bg-white border border-slate-200/90 shadow-sm hover:shadow-xl hover:border-slate-300 hover:-translate-y-1 transition-all duration-300 flex items-center justify-between group cursor-default">
             <div>
-              <span className="text-xs font-bold text-slate-500 uppercase tracking-wider block mb-1">
+              <span className="text-xs font-black text-slate-500 uppercase tracking-wider block mb-1 font-sans">
                 Wallet Balance
               </span>
-              <div className="text-2xl sm:text-3xl font-black text-[#0A1D37] font-heading">
+              <div className="text-3xl sm:text-4xl font-black text-[#0A1D37] font-sans tracking-tight">
                 ₹0
               </div>
-              <span className="text-xs font-semibold text-[#2EB85C] mt-1 block">
+              <span className="text-xs font-extrabold text-[#2EB85C] mt-1 block font-sans">
                 Available Balance
               </span>
             </div>
@@ -264,13 +264,13 @@ export const AdminDashboard: React.FC = () => {
           {/* Stat 3: Current Rank */}
           <div className="p-5 sm:p-6 rounded-2xl bg-white border border-slate-200/90 shadow-sm hover:shadow-xl hover:border-slate-300 hover:-translate-y-1 transition-all duration-300 flex items-center justify-between group cursor-default">
             <div>
-              <span className="text-xs font-bold text-slate-500 uppercase tracking-wider block mb-1">
+              <span className="text-xs font-black text-slate-500 uppercase tracking-wider block mb-1 font-sans">
                 Current Rank
               </span>
-              <div className="text-lg sm:text-xl font-black text-[#0A1D37] font-heading truncate max-w-[150px]">
+              <div className="text-xl sm:text-2xl font-black text-[#0A1D37] font-sans truncate max-w-[170px] tracking-tight">
                 Pre Sales Executive
               </div>
-              <span className="text-xs font-semibold text-[#2EB85C] mt-1 block">
+              <span className="text-xs font-extrabold text-[#2EB85C] mt-1 block font-sans">
                 Active Rank
               </span>
             </div>
@@ -284,13 +284,13 @@ export const AdminDashboard: React.FC = () => {
           {/* Stat 4: Operational Sales */}
           <div className="p-5 sm:p-6 rounded-2xl bg-white border border-slate-200/90 shadow-sm hover:shadow-xl hover:border-slate-300 hover:-translate-y-1 transition-all duration-300 flex items-center justify-between group cursor-default">
             <div>
-              <span className="text-xs font-bold text-slate-500 uppercase tracking-wider block mb-1">
+              <span className="text-xs font-black text-slate-500 uppercase tracking-wider block mb-1 font-sans">
                 Operational Sales
               </span>
-              <div className="text-2xl sm:text-3xl font-black text-[#0A1D37] font-heading">
+              <div className="text-3xl sm:text-4xl font-black text-[#0A1D37] font-sans tracking-tight">
                 0
               </div>
-              <span className="text-xs font-semibold text-slate-500 mt-1 block">
+              <span className="text-xs font-bold text-slate-600 mt-1 block font-sans">
                 Monthly Sales
               </span>
             </div>
@@ -304,13 +304,13 @@ export const AdminDashboard: React.FC = () => {
           {/* Stat 5: Referral Points */}
           <div className="p-5 sm:p-6 rounded-2xl bg-white border border-slate-200/90 shadow-sm hover:shadow-xl hover:border-slate-300 hover:-translate-y-1 transition-all duration-300 flex items-center justify-between group cursor-default">
             <div>
-              <span className="text-xs font-bold text-slate-500 uppercase tracking-wider block mb-1">
+              <span className="text-xs font-black text-slate-500 uppercase tracking-wider block mb-1 font-sans">
                 Referral Points
               </span>
-              <div className="text-2xl sm:text-3xl font-black text-[#0A1D37] font-heading">
+              <div className="text-3xl sm:text-4xl font-black text-[#0A1D37] font-sans tracking-tight">
                 0
               </div>
-              <span className="text-xs font-semibold text-slate-500 mt-1 block">
+              <span className="text-xs font-bold text-slate-600 mt-1 block font-sans">
                 Total Points
               </span>
             </div>
@@ -322,20 +322,20 @@ export const AdminDashboard: React.FC = () => {
           </div>
 
           {/* Stat 6: Reward Card */}
-          <div className="p-5 sm:p-6 rounded-2xl bg-white border border-slate-200/90 shadow-sm hover:shadow-xl hover:border-slate-300 hover:-translate-y-1 transition-all duration-300 flex items-center justify-between group cursor-default">
+          <div className="p-5 sm:p-6 rounded-2xl bg-white border border-slate-200/90 shadow-sm hover:shadow-xl hover:border-slate-300 hover:-translate-y-1 transition-all duration-300 flex items-center justify-between group cursor-default font-sans">
             <div>
-              <span className="text-xs font-bold text-slate-500 uppercase tracking-wider block mb-0.5">
+              <span className="text-xs font-black text-slate-500 uppercase tracking-wider block mb-0.5 font-sans">
                 Reward
               </span>
-              <div className="text-base sm:text-lg font-black text-amber-600 font-heading">
+              <div className="text-lg sm:text-xl font-black text-amber-600 font-sans tracking-tight">
                 No Reward
               </div>
-              <div className="text-[11px] text-slate-500 font-medium space-y-0.5 mt-1">
-                <div>Self Sales: <strong className="text-slate-800">2</strong></div>
-                <div>Team Business: <strong className="text-slate-800">41</strong></div>
-                <div>Total Business: <strong className="text-slate-800">43</strong></div>
+              <div className="text-[11px] text-slate-600 font-bold space-y-0.5 mt-1 font-sans">
+                <div>Self Sales: <strong className="text-slate-900 font-black">2</strong></div>
+                <div>Team Business: <strong className="text-slate-900 font-black">41</strong></div>
+                <div>Total Business: <strong className="text-slate-900 font-black">43</strong></div>
               </div>
-              <span className="text-[11px] font-bold text-amber-600 mt-1.5 block">
+              <span className="text-xs font-black text-amber-600 mt-1.5 block font-sans">
                 Rank Achievement
               </span>
             </div>
@@ -348,17 +348,17 @@ export const AdminDashboard: React.FC = () => {
         </div>
 
         {/* ROW 3: RECENT JOINING MEMBERS TABLE MATCHING REFERENCE SCREENSHOT 1 & 2 */}
-        <div className="rounded-3xl bg-white border border-slate-200/90 shadow-sm overflow-hidden">
+        <div className="rounded-3xl bg-white border border-slate-200/90 shadow-sm overflow-hidden font-sans">
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs">
-              <thead className="bg-white border-b border-slate-200/80 text-slate-400 font-bold uppercase tracking-wider text-[11px]">
+            <table className="w-full text-left text-xs font-sans">
+              <thead className="bg-white border-b border-slate-200/80 text-slate-500 font-extrabold uppercase tracking-wider text-xs font-sans">
                 <tr>
                   <th className="py-4 px-6 sm:px-8">NAME</th>
                   <th className="py-4 px-6 sm:px-8">REFERRAL CODE</th>
                   <th className="py-4 px-6 sm:px-8">JOINING DATE</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100 font-medium">
+              <tbody className="divide-y divide-slate-100 font-bold font-sans">
                 {[
                   { name: 'Garima', code: 'VT000008', date: '2026-08-13 05:02:24' },
                   { name: 'Priya kesarwani', code: 'VT000002', date: '2026-08-09 08:18:33' },
@@ -366,13 +366,13 @@ export const AdminDashboard: React.FC = () => {
                   { name: 'Neha Verma', code: 'VT000021', date: '2026-07-28 16:45:00' },
                 ].map((member, idx) => (
                   <tr key={idx} className="hover:bg-slate-50/70 transition">
-                    <td className="py-4 px-6 sm:px-8 font-bold text-[#0A1D37] text-sm">
+                    <td className="py-4 px-6 sm:px-8 font-extrabold text-[#0A1D37] text-sm font-sans">
                       {member.name}
                     </td>
-                    <td className="py-4 px-6 sm:px-8 font-mono font-bold text-[#2EB85C] text-sm">
+                    <td className="py-4 px-6 sm:px-8 font-black text-[#2EB85C] text-sm font-sans tracking-wide">
                       {member.code}
                     </td>
-                    <td className="py-4 px-6 sm:px-8 text-slate-600 font-mono text-xs">
+                    <td className="py-4 px-6 sm:px-8 text-slate-700 text-xs font-bold font-sans tracking-normal">
                       {member.date}
                     </td>
                   </tr>
@@ -383,23 +383,23 @@ export const AdminDashboard: React.FC = () => {
         </div>
 
         {/* ROW 4: RECENT INCOME CARD MATCHING REFERENCE SCREENSHOT 1 & 2 */}
-        <div className="rounded-3xl border border-slate-200/90 shadow-sm overflow-hidden bg-white">
+        <div className="rounded-3xl border border-slate-200/90 shadow-sm overflow-hidden bg-white font-sans">
           {/* Blue to Green Gradient Banner Header */}
           <div className="bg-gradient-to-r from-[#082B59] via-[#0E4C7A] to-[#2EB85C] px-6 sm:px-8 py-4.5 flex items-center justify-between text-white">
-            <h3 className="text-base sm:text-lg font-bold font-heading text-white tracking-wide">
+            <h3 className="text-base sm:text-lg font-black font-sans text-white tracking-wide">
               Recent Income
             </h3>
           </div>
 
           {/* Inner Table Card */}
-          <div className="p-4 sm:p-6 bg-slate-50/30">
+          <div className="p-4 sm:p-6 bg-slate-50/30 font-sans">
             <div className="bg-white rounded-2xl border border-slate-200/80 overflow-hidden shadow-2xs">
-              <div className="grid grid-cols-3 px-6 py-3 bg-slate-50 border-b border-slate-200 text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+              <div className="grid grid-cols-3 px-6 py-3 bg-slate-50 border-b border-slate-200 text-xs font-black text-slate-500 uppercase tracking-wider font-sans">
                 <div>AMOUNT</div>
                 <div className="text-center">TYPE</div>
                 <div className="text-right">DATE</div>
               </div>
-              <div className="py-10 text-center text-sm font-bold text-[#0A1D37]">
+              <div className="py-10 text-center text-sm font-black text-[#0A1D37] font-sans">
                 No Income Found
               </div>
             </div>
@@ -407,23 +407,23 @@ export const AdminDashboard: React.FC = () => {
         </div>
 
         {/* ROW 5: RECENT WITHDRAWALS CARD MATCHING REFERENCE SCREENSHOT 1 & 2 */}
-        <div className="rounded-3xl border border-slate-200/90 shadow-sm overflow-hidden bg-white">
+        <div className="rounded-3xl border border-slate-200/90 shadow-sm overflow-hidden bg-white font-sans">
           {/* Blue to Green Gradient Banner Header */}
           <div className="bg-gradient-to-r from-[#082B59] via-[#0E4C7A] to-[#2EB85C] px-6 sm:px-8 py-4.5 flex items-center justify-between text-white">
-            <h3 className="text-base sm:text-lg font-bold font-heading text-white tracking-wide">
+            <h3 className="text-base sm:text-lg font-black font-sans text-white tracking-wide">
               Recent Withdrawals
             </h3>
           </div>
 
           {/* Inner Table Card */}
-          <div className="p-4 sm:p-6 bg-slate-50/30">
+          <div className="p-4 sm:p-6 bg-slate-50/30 font-sans">
             <div className="bg-white rounded-2xl border border-slate-200/80 overflow-hidden shadow-2xs">
-              <div className="grid grid-cols-3 px-6 py-3 bg-slate-50 border-b border-slate-200 text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+              <div className="grid grid-cols-3 px-6 py-3 bg-slate-50 border-b border-slate-200 text-xs font-black text-slate-500 uppercase tracking-wider font-sans">
                 <div>AMOUNT</div>
                 <div className="text-center">STATUS</div>
                 <div className="text-right">DATE</div>
               </div>
-              <div className="py-10 text-center text-sm font-bold text-[#0A1D37]">
+              <div className="py-10 text-center text-sm font-black text-[#0A1D37] font-sans">
                 No Withdrawals Found
               </div>
             </div>
@@ -437,11 +437,10 @@ export const AdminDashboard: React.FC = () => {
             <div className="flex items-center gap-2 overflow-x-auto pb-2 sm:pb-0">
               <button
                 onClick={() => setActiveTab('stations')}
-                className={`px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center gap-2 cursor-pointer ${
-                  activeTab === 'stations'
+                className={`px-4 py-2.5 rounded-xl text-xs font-extrabold transition flex items-center gap-2 cursor-pointer ${activeTab === 'stations'
                     ? 'bg-[#081E3E] text-white shadow-sm'
                     : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
-                }`}
+                  }`}
               >
                 <Zap className="w-3.5 h-3.5 text-[#2EB85C]" />
                 <span>Charging Stations ({stations.length || 7})</span>
@@ -449,11 +448,10 @@ export const AdminDashboard: React.FC = () => {
 
               <button
                 onClick={() => setActiveTab('team')}
-                className={`px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center gap-2 cursor-pointer ${
-                  activeTab === 'team'
+                className={`px-4 py-2.5 rounded-xl text-xs font-extrabold transition flex items-center gap-2 cursor-pointer ${activeTab === 'team'
                     ? 'bg-[#081E3E] text-white shadow-sm'
                     : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
-                }`}
+                  }`}
               >
                 <Users className="w-3.5 h-3.5 text-indigo-400" />
                 <span>My Team & Staff ({employees.length || 5})</span>
@@ -461,11 +459,10 @@ export const AdminDashboard: React.FC = () => {
 
               <button
                 onClick={() => setActiveTab('finance')}
-                className={`px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center gap-2 cursor-pointer ${
-                  activeTab === 'finance'
+                className={`px-4 py-2.5 rounded-xl text-xs font-extrabold transition flex items-center gap-2 cursor-pointer ${activeTab === 'finance'
                     ? 'bg-[#081E3E] text-white shadow-sm'
                     : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
-                }`}
+                  }`}
               >
                 <Coins className="w-3.5 h-3.5 text-amber-400" />
                 <span>Income & Payouts</span>
@@ -473,11 +470,10 @@ export const AdminDashboard: React.FC = () => {
 
               <button
                 onClick={() => setActiveTab('tree')}
-                className={`px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center gap-2 cursor-pointer ${
-                  activeTab === 'tree'
+                className={`px-4 py-2.5 rounded-xl text-xs font-extrabold transition flex items-center gap-2 cursor-pointer ${activeTab === 'tree'
                     ? 'bg-[#081E3E] text-white shadow-sm'
                     : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
-                }`}
+                  }`}
               >
                 <GitFork className="w-3.5 h-3.5 text-emerald-400" />
                 <span>Team Tree (43 Members)</span>
@@ -485,11 +481,10 @@ export const AdminDashboard: React.FC = () => {
 
               <button
                 onClick={() => setActiveTab('kyc')}
-                className={`px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center gap-2 cursor-pointer ${
-                  activeTab === 'kyc'
+                className={`px-4 py-2.5 rounded-xl text-xs font-extrabold transition flex items-center gap-2 cursor-pointer ${activeTab === 'kyc'
                     ? 'bg-[#081E3E] text-white shadow-sm'
                     : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
-                }`}
+                  }`}
               >
                 <ShieldCheck className="w-3.5 h-3.5 text-teal-400" />
                 <span>KYC Verification Desk</span>
@@ -499,7 +494,7 @@ export const AdminDashboard: React.FC = () => {
             {/* Right Action */}
             <button
               onClick={() => navigate('/evcs/admin/stations')}
-              className="text-xs font-bold text-[#1E60D5] hover:text-[#144FBA] flex items-center gap-1 transition mb-2 sm:mb-0 cursor-pointer"
+              className="text-xs font-black text-[#1E60D5] hover:text-[#144FBA] flex items-center gap-1 transition mb-2 sm:mb-0 cursor-pointer"
             >
               <span>Manage All In Fullscreen</span>
               <ChevronRight className="w-4 h-4" />
@@ -578,13 +573,12 @@ export const AdminDashboard: React.FC = () => {
                         </td>
                         <td className="py-3.5 px-4">
                           <span
-                            className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase inline-flex items-center gap-1 ${
-                              station.status === 'Online'
+                            className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase inline-flex items-center gap-1 ${station.status === 'Online'
                                 ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
                                 : station.status === 'In Use'
-                                ? 'bg-blue-50 text-blue-700 border border-blue-200'
-                                : 'bg-amber-50 text-amber-700 border border-amber-200'
-                            }`}
+                                  ? 'bg-blue-50 text-blue-700 border border-blue-200'
+                                  : 'bg-amber-50 text-amber-700 border border-amber-200'
+                              }`}
                           >
                             <span className="w-1.5 h-1.5 rounded-full bg-current"></span>
                             {station.status}

@@ -70,7 +70,7 @@ export const api = {
     getOverview: () => request<{ success: boolean; data: OverviewData }>('/admin/overview'),
     getEmployees: () => request<{ success: boolean; data: User[] }>('/admin/employees'),
     createEmployee: (employeeData: Partial<User> & { password: string }) =>
-      request<{ success: boolean; message: string }>('/admin/employees', {
+      request<{ success: boolean; message: string; user?: User }>('/admin/employees', {
         method: 'POST',
         body: JSON.stringify(employeeData),
       }),
@@ -78,6 +78,11 @@ export const api = {
       request<{ success: boolean; message: string }>(`/admin/employees/${id}`, {
         method: 'PUT',
         body: JSON.stringify(employeeData),
+      }),
+    resetEmployeePassword: (id: number, newPassword: string) =>
+      request<{ success: boolean; message: string }>(`/admin/employees/${id}/reset-password`, {
+        method: 'POST',
+        body: JSON.stringify({ newPassword }),
       }),
     toggleEmployeeStatus: (id: number) =>
       request<{ success: boolean; message: string; status: 'Active' | 'Inactive' }>(`/admin/employees/${id}/status`, {

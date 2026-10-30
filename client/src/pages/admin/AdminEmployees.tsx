@@ -15,7 +15,14 @@ import {
   Lock,
   Mail,
   Phone,
-  Briefcase
+  Briefcase,
+  Copy,
+  Check,
+  KeyRound,
+  Eye,
+  EyeOff,
+  RefreshCw,
+  Sparkles
 } from 'lucide-react';
 
 export const AdminEmployees: React.FC = () => {
@@ -32,6 +39,7 @@ export const AdminEmployees: React.FC = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    employee_id: '',
     password: '',
     role: 'Employee' as Role,
     designation: '',
@@ -42,6 +50,35 @@ export const AdminEmployees: React.FC = () => {
   const [formError, setFormError] = useState<string>('');
   const [formSuccess, setFormSuccess] = useState<string>('');
   const [actionLoading, setActionLoading] = useState<boolean>(false);
+
+  // Post-registration credentials handover state
+  const [createdCredentials, setCreatedCredentials] = useState<{
+    name: string;
+    email: string;
+    employee_id: string;
+    password: string;
+    role: string;
+  } | null>(null);
+  const [showCreatedPassword, setShowCreatedPassword] = useState<boolean>(true);
+  const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [copiedCredentials, setCopiedCredentials] = useState<boolean>(false);
+
+  // Reset password modal state
+  const [resetModalEmployee, setResetModalEmployee] = useState<User | null>(null);
+  const [resetPasswordValue, setResetPasswordValue] = useState<string>('');
+  const [resetSuccess, setResetSuccess] = useState<string>('');
+  const [resetError, setResetError] = useState<string>('');
+  const [resetLoading, setResetLoading] = useState<boolean>(false);
+  const [resetCopied, setResetCopied] = useState<boolean>(false);
+
+  const generateRandomPassword = () => {
+    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789!@#$%';
+    let pwd = 'Viv@';
+    for (let i = 0; i < 6; i++) {
+      pwd += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return pwd;
+  };
 
   const fetchEmployees = async () => {
     try {
@@ -65,14 +102,17 @@ export const AdminEmployees: React.FC = () => {
     setFormData({
       name: '',
       email: '',
-      password: '',
+      employee_id: '',
+      password: generateRandomPassword(),
       role: 'Employee',
-      designation: '',
-      department: '',
+      designation: 'Field Service Specialist',
+      department: 'Technical Operations',
       phone: '',
     });
     setFormError('');
     setFormSuccess('');
+    setCreatedCredentials(null);
+    setCopiedCredentials(false);
     setIsAddModalOpen(true);
   };
 
@@ -81,6 +121,7 @@ export const AdminEmployees: React.FC = () => {
     setFormData({
       name: emp.name,
       email: emp.email,
+      employee_id: emp.employee_id,
       password: '',
       role: emp.role,
       designation: emp.designation || '',
@@ -101,6 +142,7 @@ export const AdminEmployees: React.FC = () => {
       const res = await api.admin.createEmployee({
         name: formData.name,
         email: formData.email,
+        employee_id: formData.employee_id.trim() || undefined,
         password: formData.password,
         role: formData.role,
         designation: formData.designation,
@@ -109,14 +151,18 @@ export const AdminEmployees: React.FC = () => {
       });
 
       if (res.success) {
-        setFormSuccess(res.message);
-        setTimeout(() => {
-          setIsAddModalOpen(false);
-          fetchEmployees();
-        }, 1200);
+        const assignedId = res.user?.employee_id || formData.employee_id.trim() || 'VIV-EMP-PROV';
+        setCreatedCredentials({
+          name: formData.name,
+          email: formData.email,
+          employee_id: assignedId,
+          password: formData.password,
+          role: formData.role,
+        });
+        fetchEmployees();
       }
     } catch (err: any) {
-      setFormError(err.message || 'Failed to create employee account.');
+      setFormError(err.message || 'Failed to register employee account.');
     } finally {
       setActionLoading(false);
     }
@@ -155,6 +201,26 @@ export const AdminEmployees: React.FC = () => {
     }
   };
 
+  const handleResetPasswordSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!resetModalEmployee || !resetPasswordValue) return;
+
+    setResetLoading(true);
+    setResetError('');
+    setResetSuccess('');
+
+    try {
+      const res = await api.admin.resetEmployeePassword(resetModalEmployee.id, resetPasswordValue);
+      if (res.success) {
+        setResetSuccess(res.message);
+      }
+    } catch (err: any) {
+      setResetError(err.message || 'Failed to reset employee password.');
+    } finally {
+      setResetLoading(false);
+    }
+  };
+
   const handleToggleStatus = async (id: number) => {
     try {
       const res = await api.admin.toggleEmployeeStatus(id);
@@ -163,6 +229,14 @@ export const AdminEmployees: React.FC = () => {
       }
     } catch (err: any) {
       alert(err.message || 'Failed to toggle employee status.');
+    }
+  };
+
+  const copyToClipboard = (text: string, isCredentialsAll = false) => {
+    navigator.clipboard.writeText(text);
+    if (isCredentialsAll) {
+      setCopiedCredentials(true);
+      setTimeout(() => setCopiedCredentials(false), 2500);
     }
   };
 
@@ -186,19 +260,19 @@ export const AdminEmployees: React.FC = () => {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 font-heading">
-              Employee Management
+              Employee Management & Provisioning
             </h1>
             <p className="text-xs text-slate-500 mt-1">
-              Add personnel, manage roles, adjust permissions, and toggle access clearance.
+              Admin registers staff & field technicians, issues Employee IDs, assigns login credentials, and manages passwords.
             </p>
           </div>
 
           <button
             onClick={handleOpenAddModal}
-            className="px-4 py-2.5 rounded-xl bg-[#022353] hover:bg-[#01183b] text-white font-bold text-xs tracking-wider transition flex items-center justify-center gap-2 shadow-md shadow-[#022353]/20"
+            className="px-4 py-2.5 rounded-xl bg-[#022353] hover:bg-[#01183b] text-white font-bold text-xs tracking-wider transition flex items-center justify-center gap-2 shadow-md shadow-[#022353]/20 cursor-pointer"
           >
             <UserPlus className="w-4 h-4" />
-            <span>Add New Employee</span>
+            <span>Register New Employee</span>
           </button>
         </div>
 
@@ -260,21 +334,39 @@ export const AdminEmployees: React.FC = () => {
                 ) : (
                   filteredEmployees.map((emp) => (
                     <tr key={emp.id} className="hover:bg-slate-50 transition">
-                      <td className="py-3.5 px-4 font-mono font-bold text-[#022353]">
-                        {emp.employee_id}
+                      <td className="py-3.5 px-4">
+                        <div className="flex items-center gap-1.5 font-mono font-bold text-[#022353]">
+                          <span>{emp.employee_id}</span>
+                          <button
+                            onClick={() => {
+                              navigator.clipboard.writeText(emp.employee_id);
+                              setCopiedId(emp.employee_id);
+                              setTimeout(() => setCopiedId(null), 1800);
+                            }}
+                            title="Copy Employee ID"
+                            className="p-1 text-slate-400 hover:text-[#022353] rounded transition cursor-pointer"
+                          >
+                            {copiedId === emp.employee_id ? (
+                              <Check className="w-3.5 h-3.5 text-emerald-600" />
+                            ) : (
+                              <Copy className="w-3.5 h-3.5" />
+                            )}
+                          </button>
+                        </div>
                       </td>
 
                       <td className="py-3.5 px-4">
                         <div className="font-bold text-slate-900">{emp.name}</div>
-                        <div className="text-[11px] text-slate-500">{emp.email}</div>
+                        <div className="text-[11px] text-slate-500 flex items-center gap-1">
+                          <span>{emp.email}</span>
+                        </div>
                       </td>
 
                       <td className="py-3.5 px-4">
-                        <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold border ${
-                          emp.role === 'Admin'
+                        <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold border ${emp.role === 'Admin'
                             ? 'bg-blue-50 text-[#022353] border-blue-200'
                             : 'bg-emerald-50 text-emerald-800 border-emerald-200'
-                        }`}>
+                          }`}>
                           {emp.role}
                         </span>
                       </td>
@@ -289,32 +381,47 @@ export const AdminEmployees: React.FC = () => {
                       </td>
 
                       <td className="py-3.5 px-4">
-                        <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
-                          emp.status === 'Active'
+                        <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${emp.status === 'Active'
                             ? 'bg-emerald-50 text-emerald-800 border border-emerald-200'
                             : 'bg-red-50 text-red-800 border border-red-200'
-                        }`}>
+                          }`}>
                           {emp.status}
                         </span>
                       </td>
 
                       <td className="py-3.5 px-4 text-right">
-                        <div className="flex items-center justify-end gap-2">
+                        <div className="flex items-center justify-end gap-1.5">
+                          {/* Quick Password Reset */}
+                          <button
+                            onClick={() => {
+                              setResetModalEmployee(emp);
+                              setResetPasswordValue(generateRandomPassword());
+                              setResetSuccess('');
+                              setResetError('');
+                              setResetCopied(false);
+                            }}
+                            className="p-1.5 rounded-lg bg-indigo-50 hover:bg-indigo-100 text-indigo-800 transition border border-indigo-200 cursor-pointer"
+                            title="Reset Employee Password"
+                          >
+                            <KeyRound className="w-3.5 h-3.5" />
+                          </button>
+
+                          {/* Edit Details */}
                           <button
                             onClick={() => handleOpenEditModal(emp)}
-                            className="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 hover:text-slate-900 transition border border-slate-200"
+                            className="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 hover:text-slate-900 transition border border-slate-200 cursor-pointer"
                             title="Edit Employee & Roles"
                           >
                             <Edit className="w-3.5 h-3.5" />
                           </button>
 
+                          {/* Status Toggle */}
                           <button
                             onClick={() => handleToggleStatus(emp.id)}
-                            className={`p-1.5 rounded-lg transition border ${
-                              emp.status === 'Active'
+                            className={`p-1.5 rounded-lg transition border cursor-pointer ${emp.status === 'Active'
                                 ? 'bg-amber-50 hover:bg-amber-100 text-amber-700 border-amber-200'
                                 : 'bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border-emerald-200'
-                            }`}
+                              }`}
                             title={emp.status === 'Active' ? 'Deactivate Account' : 'Activate Account'}
                           >
                             <Power className="w-3.5 h-3.5" />
@@ -330,144 +437,403 @@ export const AdminEmployees: React.FC = () => {
         </div>
       </div>
 
-      {/* Add Employee Modal */}
+      {/* Add Employee Modal & Credential Handover */}
       {isAddModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fadeIn">
           <div className="max-w-lg w-full bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-2xl relative">
             <button
-              onClick={() => setIsAddModalOpen(false)}
-              className="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-700 rounded-lg hover:bg-slate-100"
+              onClick={() => {
+                setIsAddModalOpen(false);
+                setCreatedCredentials(null);
+              }}
+              className="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-700 rounded-lg hover:bg-slate-100 cursor-pointer"
             >
               <X className="w-5 h-5" />
             </button>
 
-            <h3 className="text-xl font-bold text-slate-900 font-heading flex items-center gap-2 mb-1">
-              <UserPlus className="w-5 h-5 text-[#022353]" />
-              <span>Create New Staff Account</span>
-            </h3>
-            <p className="text-xs text-slate-500 mb-6">
-              Enter employee credentials. An automatic employee ID will be generated upon submission.
-            </p>
-
-            {formError && (
-              <div className="mb-4 p-3 rounded-xl bg-red-50 border border-red-300 text-red-800 text-xs flex items-center gap-2">
-                <AlertCircle className="w-4 h-4 shrink-0 text-red-600" />
-                <span>{formError}</span>
-              </div>
-            )}
-
-            {formSuccess && (
-              <div className="mb-4 p-3 rounded-xl bg-emerald-50 border border-emerald-300 text-emerald-800 text-xs flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-600" />
-                <span>{formSuccess}</span>
-              </div>
-            )}
-
-            <form onSubmit={handleCreateSubmit} className="space-y-4">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-[11px] font-bold text-slate-700 uppercase mb-1.5">Full Name *</label>
-                  <input
-                    type="text"
-                    required
-                    value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    placeholder="Siddharth Rao"
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-300 text-xs text-slate-900 focus:border-[#022353] outline-none"
-                  />
+            {createdCredentials ? (
+              /* Success Credential Handover Screen */
+              <div className="space-y-5 animate-fadeIn">
+                <div className="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center">
+                  <CheckCircle2 className="w-7 h-7 text-emerald-600" />
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-bold text-slate-700 uppercase mb-1.5">Email *</label>
-                  <input
-                    type="email"
-                    required
-                    value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    placeholder="siddharth@vivtron.com"
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-300 text-xs text-slate-900 focus:border-[#022353] outline-none"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-[11px] font-bold text-slate-700 uppercase mb-1.5">Password *</label>
-                  <input
-                    type="password"
-                    required
-                    value={formData.password}
-                    onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                    placeholder="Min 6 characters"
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-300 text-xs text-slate-900 focus:border-[#022353] outline-none"
-                  />
+                  <h3 className="text-xl font-bold text-slate-900 font-heading">
+                    Employee Account Registered!
+                  </h3>
+                  <p className="text-xs text-slate-500 mt-1">
+                    Employee has been created in the database. Provide the following login credentials to the employee to sign in at <span className="font-semibold text-[#022353]">/evcs/login</span>.
+                  </p>
                 </div>
 
-                <div>
-                  <label className="block text-[11px] font-bold text-slate-700 uppercase mb-1.5">Role Permission *</label>
-                  <select
-                    value={formData.role}
-                    onChange={(e) => setFormData({ ...formData, role: e.target.value as Role })}
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-300 text-xs text-slate-900 focus:border-[#022353] outline-none font-semibold"
-                  >
-                    <option value="Employee">Employee (Field & Telemetry)</option>
-                    <option value="Admin">Admin (Full Infrastructure Control)</option>
-                  </select>
+                {/* Credential Card */}
+                <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-3 font-mono text-xs">
+                  <div className="flex items-center justify-between py-1 border-b border-slate-200/80">
+                    <span className="text-slate-500 font-sans font-medium">Employee Name:</span>
+                    <span className="font-bold text-slate-900 font-sans">{createdCredentials.name}</span>
+                  </div>
+
+                  <div className="flex items-center justify-between py-1 border-b border-slate-200/80">
+                    <span className="text-slate-500 font-sans font-medium">Employee ID (Login ID):</span>
+                    <span className="font-bold text-[#022353]">{createdCredentials.employee_id}</span>
+                  </div>
+
+                  <div className="flex items-center justify-between py-1 border-b border-slate-200/80">
+                    <span className="text-slate-500 font-sans font-medium">Login Email:</span>
+                    <span className="font-bold text-slate-900">{createdCredentials.email}</span>
+                  </div>
+
+                  <div className="flex items-center justify-between py-1 border-b border-slate-200/80">
+                    <span className="text-slate-500 font-sans font-medium">Assigned Password:</span>
+                    <div className="flex items-center gap-2">
+                      <span className="font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                        {showCreatedPassword ? createdCredentials.password : '••••••••'}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => setShowCreatedPassword(!showCreatedPassword)}
+                        className="text-slate-400 hover:text-slate-600 cursor-pointer"
+                      >
+                        {showCreatedPassword ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between py-1">
+                    <span className="text-slate-500 font-sans font-medium">Assigned Role:</span>
+                    <span className="font-bold text-slate-900 font-sans">{createdCredentials.role}</span>
+                  </div>
                 </div>
-              </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-[11px] font-bold text-slate-700 uppercase mb-1.5">Job Designation</label>
-                  <input
-                    type="text"
-                    value={formData.designation}
-                    onChange={(e) => setFormData({ ...formData, designation: e.target.value })}
-                    placeholder="Field Technician"
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-300 text-xs text-slate-900 focus:border-[#022353] outline-none"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-[11px] font-bold text-slate-700 uppercase mb-1.5">Department</label>
-                  <input
-                    type="text"
-                    value={formData.department}
-                    onChange={(e) => setFormData({ ...formData, department: e.target.value })}
-                    placeholder="Operations & NOC"
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-300 text-xs text-slate-900 focus:border-[#022353] outline-none"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-[11px] font-bold text-slate-700 uppercase mb-1.5">Phone Number</label>
-                <input
-                  type="text"
-                  value={formData.phone}
-                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  placeholder="+91 98765 43210"
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-300 text-xs text-slate-900 focus:border-[#022353] outline-none"
-                />
-              </div>
-
-              <div className="pt-3 flex justify-end gap-3">
+                {/* Copy All Button */}
                 <button
                   type="button"
-                  onClick={() => setIsAddModalOpen(false)}
-                  className="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold"
+                  onClick={() => {
+                    const text = `Vivtron Staff Login Credentials:\nName: ${createdCredentials.name}\nEmployee ID: ${createdCredentials.employee_id}\nEmail: ${createdCredentials.email}\nPassword: ${createdCredentials.password}\nLogin Portal: ${window.location.origin}/evcs/login`;
+                    copyToClipboard(text, true);
+                  }}
+                  className="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs tracking-wider transition flex items-center justify-center gap-2 shadow-md shadow-emerald-600/20 cursor-pointer"
                 >
-                  Cancel
+                  {copiedCredentials ? (
+                    <>
+                      <Check className="w-4 h-4" />
+                      <span>Credentials Copied to Clipboard!</span>
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="w-4 h-4" />
+                      <span>Copy Credentials for Employee</span>
+                    </>
+                  )}
                 </button>
-                <button
-                  type="submit"
-                  disabled={actionLoading}
-                  className="px-5 py-2 rounded-xl bg-[#022353] hover:bg-[#01183b] text-white text-xs font-bold transition disabled:opacity-50 shadow-md shadow-[#022353]/20"
-                >
-                  {actionLoading ? 'Creating...' : 'Create Employee Profile'}
-                </button>
+
+                <div className="flex items-center justify-between gap-3 pt-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setCreatedCredentials(null);
+                      handleOpenAddModal();
+                    }}
+                    className="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold cursor-pointer"
+                  >
+                    Register Another Employee
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsAddModalOpen(false);
+                      setCreatedCredentials(null);
+                    }}
+                    className="px-5 py-2 rounded-xl bg-[#022353] hover:bg-[#01183b] text-white text-xs font-bold cursor-pointer"
+                  >
+                    Done & Close
+                  </button>
+                </div>
               </div>
-            </form>
+            ) : (
+              /* Registration Form */
+              <>
+                <h3 className="text-xl font-bold text-slate-900 font-heading flex items-center gap-2 mb-1">
+                  <UserPlus className="w-5 h-5 text-[#022353]" />
+                  <span>Register Employee Account</span>
+                </h3>
+                <p className="text-xs text-slate-500 mb-6">
+                  Admin registers staff personnel and assigns login credentials. The employee will log in using their Employee ID or Email and the password set below.
+                </p>
+
+                {formError && (
+                  <div className="mb-4 p-3 rounded-xl bg-red-50 border border-red-300 text-red-800 text-xs flex items-center gap-2">
+                    <AlertCircle className="w-4 h-4 shrink-0 text-red-600" />
+                    <span>{formError}</span>
+                  </div>
+                )}
+
+                <form onSubmit={handleCreateSubmit} className="space-y-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-[11px] font-bold text-slate-700 uppercase mb-1.5">Full Name *</label>
+                      <input
+                        type="text"
+                        required
+                        value={formData.name}
+                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                        placeholder="Rohan Sharma"
+                        className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-300 text-xs text-slate-900 focus:border-[#022353] outline-none"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-[11px] font-bold text-slate-700 uppercase mb-1.5">Login Email *</label>
+                      <input
+                        type="email"
+                        required
+                        value={formData.email}
+                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                        placeholder="rohan@vivtron.com"
+                        className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-300 text-xs text-slate-900 focus:border-[#022353] outline-none"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-[11px] font-bold text-slate-700 uppercase mb-1.5">
+                        Employee ID <span className="font-normal text-slate-400 lowercase">(optional)</span>
+                      </label>
+                      <input
+                        type="text"
+                        value={formData.employee_id}
+                        onChange={(e) => setFormData({ ...formData, employee_id: e.target.value })}
+                        placeholder="Auto (e.g. VIV-EMP-105)"
+                        className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-300 text-xs text-slate-900 font-mono focus:border-[#022353] outline-none"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-[11px] font-bold text-slate-700 uppercase mb-1.5">Role Permission *</label>
+                      <select
+                        value={formData.role}
+                        onChange={(e) => setFormData({ ...formData, role: e.target.value as Role })}
+                        className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-300 text-xs text-slate-900 focus:border-[#022353] outline-none font-semibold"
+                      >
+                        <option value="Employee">Employee (Field & Telemetry Portal)</option>
+                        <option value="Admin">Admin (Full Infrastructure Control)</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  {/* Password with generator */}
+                  <div>
+                    <div className="flex items-center justify-between mb-1.5">
+                      <label className="block text-[11px] font-bold text-slate-700 uppercase">Employee Password *</label>
+                      <button
+                        type="button"
+                        onClick={() => setFormData({ ...formData, password: generateRandomPassword() })}
+                        className="text-[11px] text-[#022353] hover:underline font-semibold flex items-center gap-1 cursor-pointer"
+                      >
+                        <Sparkles className="w-3 h-3 text-[#35C759]" />
+                        <span>Generate Strong Password</span>
+                      </button>
+                    </div>
+                    <div className="relative">
+                      <input
+                        type="text"
+                        required
+                        value={formData.password}
+                        onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                        placeholder="Min 6 characters"
+                        className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-300 text-xs text-slate-900 font-mono focus:border-[#022353] outline-none pr-10"
+                      />
+                      <Lock className="w-4 h-4 text-slate-400 absolute right-3 top-3" />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-[11px] font-bold text-slate-700 uppercase mb-1.5">Job Designation</label>
+                      <input
+                        type="text"
+                        value={formData.designation}
+                        onChange={(e) => setFormData({ ...formData, designation: e.target.value })}
+                        placeholder="Field Technician"
+                        className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-300 text-xs text-slate-900 focus:border-[#022353] outline-none"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-[11px] font-bold text-slate-700 uppercase mb-1.5">Department</label>
+                      <input
+                        type="text"
+                        value={formData.department}
+                        onChange={(e) => setFormData({ ...formData, department: e.target.value })}
+                        placeholder="Technical Operations"
+                        className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-300 text-xs text-slate-900 focus:border-[#022353] outline-none"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] font-bold text-slate-700 uppercase mb-1.5">Phone Number</label>
+                    <input
+                      type="text"
+                      value={formData.phone}
+                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                      placeholder="+91 98765 43210"
+                      className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-300 text-xs text-slate-900 focus:border-[#022353] outline-none"
+                    />
+                  </div>
+
+                  <div className="pt-3 flex justify-end gap-3">
+                    <button
+                      type="button"
+                      onClick={() => setIsAddModalOpen(false)}
+                      className="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold cursor-pointer"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="submit"
+                      disabled={actionLoading}
+                      className="px-5 py-2 rounded-xl bg-[#022353] hover:bg-[#01183b] text-white text-xs font-bold transition disabled:opacity-50 shadow-md shadow-[#022353]/20 cursor-pointer"
+                    >
+                      {actionLoading ? 'Registering...' : 'Register Employee & Generate Credentials'}
+                    </button>
+                  </div>
+                </form>
+              </>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Quick Reset Password Modal */}
+      {resetModalEmployee && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fadeIn">
+          <div className="max-w-md w-full bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-2xl relative">
+            <button
+              onClick={() => {
+                setResetModalEmployee(null);
+                setResetSuccess('');
+                setResetError('');
+              }}
+              className="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-700 rounded-lg hover:bg-slate-100 cursor-pointer"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            <div className="w-12 h-12 rounded-2xl bg-indigo-100 text-indigo-800 flex items-center justify-center mb-4">
+              <KeyRound className="w-6 h-6 text-indigo-700" />
+            </div>
+
+            <h3 className="text-xl font-bold text-slate-900 font-heading">
+              Reset Employee Password
+            </h3>
+            <p className="text-xs text-slate-500 mt-1 mb-5">
+              Set a new login password for <span className="font-bold text-slate-800">{resetModalEmployee.name}</span> ({resetModalEmployee.employee_id}).
+            </p>
+
+            {resetError && (
+              <div className="mb-4 p-3 rounded-xl bg-red-50 border border-red-300 text-red-800 text-xs flex items-center gap-2">
+                <AlertCircle className="w-4 h-4 shrink-0 text-red-600" />
+                <span>{resetError}</span>
+              </div>
+            )}
+
+            {resetSuccess ? (
+              <div className="space-y-4 animate-fadeIn">
+                <div className="p-3.5 rounded-xl bg-emerald-50 border border-emerald-300 text-emerald-800 text-xs flex items-start gap-2">
+                  <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-600 mt-0.5" />
+                  <span>{resetSuccess}</span>
+                </div>
+
+                <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2 text-xs font-mono">
+                  <div className="flex justify-between">
+                    <span className="text-slate-500 font-sans">Login ID:</span>
+                    <span className="font-bold text-[#022353]">{resetModalEmployee.employee_id}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-slate-500 font-sans">Email:</span>
+                    <span className="font-bold text-slate-900">{resetModalEmployee.email}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-slate-500 font-sans">New Password:</span>
+                    <span className="font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                      {resetPasswordValue}
+                    </span>
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    const text = `Vivtron Password Reset:\nName: ${resetModalEmployee.name}\nEmployee ID: ${resetModalEmployee.employee_id}\nEmail: ${resetModalEmployee.email}\nNew Password: ${resetPasswordValue}\nPortal: ${window.location.origin}/evcs/login`;
+                    navigator.clipboard.writeText(text);
+                    setResetCopied(true);
+                    setTimeout(() => setResetCopied(false), 2000);
+                  }}
+                  className="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs tracking-wider transition flex items-center justify-center gap-2 cursor-pointer"
+                >
+                  {resetCopied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                  <span>{resetCopied ? 'Credentials Copied!' : 'Copy New Credentials'}</span>
+                </button>
+
+                <div className="pt-2 flex justify-end">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setResetModalEmployee(null);
+                      setResetSuccess('');
+                    }}
+                    className="px-5 py-2 rounded-xl bg-[#022353] hover:bg-[#01183b] text-white text-xs font-bold cursor-pointer"
+                  >
+                    Done
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <form onSubmit={handleResetPasswordSubmit} className="space-y-4">
+                <div>
+                  <div className="flex items-center justify-between mb-1.5">
+                    <label className="block text-[11px] font-bold text-slate-700 uppercase">New Password *</label>
+                    <button
+                      type="button"
+                      onClick={() => setResetPasswordValue(generateRandomPassword())}
+                      className="text-[11px] text-[#022353] hover:underline font-semibold flex items-center gap-1 cursor-pointer"
+                    >
+                      <Sparkles className="w-3 h-3 text-[#35C759]" />
+                      <span>Generate</span>
+                    </button>
+                  </div>
+                  <input
+                    type="text"
+                    required
+                    value={resetPasswordValue}
+                    onChange={(e) => setResetPasswordValue(e.target.value)}
+                    placeholder="Enter or generate new password"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-300 text-xs text-slate-900 font-mono focus:border-[#022353] outline-none"
+                  />
+                </div>
+
+                <div className="pt-2 flex justify-end gap-3">
+                  <button
+                    type="button"
+                    onClick={() => setResetModalEmployee(null)}
+                    className="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold cursor-pointer"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={resetLoading}
+                    className="px-5 py-2 rounded-xl bg-[#022353] hover:bg-[#01183b] text-white text-xs font-bold transition disabled:opacity-50 cursor-pointer"
+                  >
+                    {resetLoading ? 'Updating...' : 'Set New Password'}
+                  </button>
+                </div>
+              </form>
+            )}
           </div>
         </div>
       )}
@@ -478,7 +844,7 @@ export const AdminEmployees: React.FC = () => {
           <div className="max-w-lg w-full bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-2xl relative">
             <button
               onClick={() => setEditEmployee(null)}
-              className="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-700 rounded-lg hover:bg-slate-100"
+              className="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-700 rounded-lg hover:bg-slate-100 cursor-pointer"
             >
               <X className="w-5 h-5" />
             </button>
@@ -591,14 +957,14 @@ export const AdminEmployees: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setEditEmployee(null)}
-                  className="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold"
+                  className="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={actionLoading}
-                  className="px-5 py-2 rounded-xl bg-[#022353] hover:bg-[#01183b] text-white text-xs font-bold transition disabled:opacity-50 shadow-md shadow-[#022353]/20"
+                  className="px-5 py-2 rounded-xl bg-[#022353] hover:bg-[#01183b] text-white text-xs font-bold transition disabled:opacity-50 shadow-md shadow-[#022353]/20 cursor-pointer"
                 >
                   {actionLoading ? 'Saving...' : 'Update Employee'}
                 </button>

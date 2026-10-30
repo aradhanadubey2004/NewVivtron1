@@ -102,7 +102,7 @@ export const EmployeeDashboard: React.FC = () => {
 
   return (
     <EmployeeLayout>
-      <div className="space-y-6 sm:space-y-8 max-w-7xl mx-auto">
+      <div className="space-y-6 sm:space-y-8 max-w-7xl mx-auto font-sans">
         {/* ROW 1: THE TWO HERO CARDS MATCHING REFERENCE SCREENSHOT */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* CARD 1 (LEFT): WELCOME HERO BANNER */}
@@ -115,16 +115,16 @@ export const EmployeeDashboard: React.FC = () => {
             />
 
             <div className="space-y-3 relative z-10">
-              <span className="text-[11px] font-bold text-slate-400 uppercase tracking-widest font-mono">
+              <span className="text-[11px] font-bold text-slate-400 uppercase tracking-widest font-sans">
                 DASHBOARD
               </span>
 
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#0A1D37] font-heading leading-tight tracking-tight">
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#0A1D37] font-sans leading-tight tracking-tight">
                 Welcome, <br />
                 <span className="text-[#2EB85C] block mt-0.5">{employeeName}</span>
               </h2>
 
-              <p className="text-xs sm:text-sm text-slate-500 font-medium">
+              <p className="text-xs sm:text-sm text-slate-500 font-medium font-sans">
                 Welcome back! Have a productive day.
               </p>
             </div>

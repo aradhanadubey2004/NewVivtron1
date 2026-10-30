@@ -539,7 +539,7 @@ export const EVHome: React.FC = () => {
 
         {/* Real Vehicle Lineup Showcase (3 Columns Carousel with Clean Images & Full Screen Preview) */}
         <section className="py-20 bg-gradient-to-b from-[#eaf3e5]/40 via-white to-[#eaf3e5]/20 relative">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-16 xl:px-20">
             {/* Section Header with Carousel Navigation Buttons */}
             <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
               <div>
@@ -585,17 +585,17 @@ export const EVHome: React.FC = () => {
 
             {/* Carousel Container (3 Columns on Desktop, 2 on Tablet, 1 on Mobile) */}
             <div className="relative" data-aos="fade-up" data-aos-duration="900">
-              {/* Floating Side Arrow Buttons */}
+              {/* Floating Side Arrow Buttons - Positioned outside the cards' borders */}
               <button
                 onClick={prevSlide}
-                className="hidden lg:flex absolute -left-5 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-white border border-slate-200/90 text-[#101828] hover:text-[#4D9900] hover:border-[#4D9900] shadow-xl items-center justify-center transition-all hover:scale-110 cursor-pointer"
+                className="hidden lg:flex absolute -left-14 xl:-left-16 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-white border border-slate-200/90 text-[#101828] hover:text-[#4D9900] hover:border-[#4D9900] shadow-xl items-center justify-center transition-all hover:scale-110 cursor-pointer"
                 aria-label="Previous Slide"
               >
                 <ChevronLeft className="w-6 h-6" />
               </button>
               <button
                 onClick={nextSlide}
-                className="hidden lg:flex absolute -right-5 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-white border border-slate-200/90 text-[#101828] hover:text-[#4D9900] hover:border-[#4D9900] shadow-xl items-center justify-center transition-all hover:scale-110 cursor-pointer"
+                className="hidden lg:flex absolute -right-14 xl:-right-16 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-white border border-slate-200/90 text-[#101828] hover:text-[#4D9900] hover:border-[#4D9900] shadow-xl items-center justify-center transition-all hover:scale-110 cursor-pointer"
                 aria-label="Next Slide"
               >
                 <ChevronRight className="w-6 h-6" />

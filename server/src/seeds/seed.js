@@ -43,13 +43,20 @@ export async function runSeed() {
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `);
 
-  insertStation.run('VIV-ST-001', 'Metro Central Superhub', '450 Silicon Boulevard', 'San Francisco', 'Ultra-Fast Hub', '360 kW', '4x CCS2, 2x CHAdeMO', 'Online', 4820, 184500.5, 99.9, '2026-10-15');
-  insertStation.run('VIV-ST-002', 'Airport Express Depot', 'Terminal 2 Logistics Way', 'San Jose', 'DC Fast Charger', '240 kW', '2x CCS2, 1x CHAdeMO', 'Online', 3210, 112400.0, 99.7, '2026-10-18');
-  insertStation.run('VIV-ST-003', 'Innovation Park Hub', '88 Research Parkway', 'Palo Alto', 'DC Fast Charger', '150 kW', '2x CCS2', 'In Use', 2150, 78900.2, 99.5, '2026-10-20');
-  insertStation.run('VIV-ST-004', 'Harbor Point Gateway', '120 Ocean View Drive', 'Oakland', 'Ultra-Fast Hub', '360 kW', '6x CCS2', 'Maintenance', 1980, 64200.8, 97.4, '2026-10-22');
-  insertStation.run('VIV-ST-005', 'Commercial Fleet Plaza', '300 Freight Corridor', 'Fremont', 'Fleet Depot', '180 kW', '4x CCS2', 'Online', 5400, 240100.0, 99.8, '2026-10-10');
-  insertStation.run('VIV-ST-006', 'Downtown Eco Station', '15 Market Center', 'Berkeley', 'AC Commercial Wallbox', '22 kW', '8x Type 2', 'Online', 1420, 28300.4, 99.9, '2026-10-12');
-  insertStation.run('VIV-ST-007', 'North Bay Transit Hub', '77 Highway 101 Link', 'San Rafael', 'DC Fast Charger', '120 kW', '2x CCS2', 'Offline', 890, 31200.0, 94.2, '2026-10-05');
+  insertStation.run(
+    'VIV-ST-001',
+    'Vivtron EVCS - Connaught Place Central',
+    'Outer Circle, Connaught Place',
+    'New Delhi',
+    'Ultra-Fast Hub',
+    '360 kW',
+    '4x CCS2, 2x CHAdeMO',
+    'Online',
+    4820,
+    184500.5,
+    99.9,
+    '2026-10-25'
+  );
 
   console.log('--- Seeding EVCS Products ---');
   const insertProduct = db.prepare(`
@@ -119,9 +126,6 @@ export async function runSeed() {
   const devUser = db.prepare('SELECT id FROM users WHERE employee_id = ?').get('VIV-EMP-103');
 
   const st1 = db.prepare('SELECT id FROM charging_stations WHERE station_code = ?').get('VIV-ST-001');
-  const st4 = db.prepare('SELECT id FROM charging_stations WHERE station_code = ?').get('VIV-ST-004');
-  const st5 = db.prepare('SELECT id FROM charging_stations WHERE station_code = ?').get('VIV-ST-005');
-  const st7 = db.prepare('SELECT id FROM charging_stations WHERE station_code = ?').get('VIV-ST-007');
 
   console.log('--- Seeding Tasks ---');
   const insertTask = db.prepare(`
@@ -130,10 +134,10 @@ export async function runSeed() {
   `);
 
   insertTask.run(
-    'Harbor Point Liquid Cable Telemetry Inspection',
+    'Connaught Place Liquid Cable Telemetry Inspection',
     'Perform diagnostic check on cooling pump pressure sensor and replace filter valve.',
     elenaUser?.id || null,
-    st4?.id || null,
+    st1?.id || null,
     'High',
     'In Progress',
     '2026-10-24'
@@ -150,10 +154,10 @@ export async function runSeed() {
   );
 
   insertTask.run(
-    'North Bay Grid Feed Recommissioning',
+    'Connaught Place Grid Feed Optimization',
     'Coordinate with local utility for breaker recalibration following power surge event.',
     sarahUser?.id || null,
-    st7?.id || null,
+    st1?.id || null,
     'Critical',
     'Pending',
     '2026-10-23'
@@ -163,7 +167,7 @@ export async function runSeed() {
     'Firmware Upgrade v4.8 Rollout',
     'Deploy OCPP 2.0.1 TLS 1.3 security update across all 4 dispensers.',
     devUser?.id || null,
-    st5?.id || null,
+    st1?.id || null,
     'Low',
     'Completed',
     '2026-10-21'
@@ -176,8 +180,8 @@ export async function runSeed() {
   `);
 
   insertActivity.run(adminUser?.id || null, 'System Audit', 'Admin Marcus Vance reviewed Q4 grid compliance metrics.');
-  insertActivity.run(elenaUser?.id || null, 'Station Inspection', 'Elena Rostova initiated diagnostics on Harbor Point Gateway.');
-  insertActivity.run(devUser?.id || null, 'Firmware Update', 'Dev Patel completed firmware deployment v4.8 to Commercial Fleet Plaza.');
+  insertActivity.run(elenaUser?.id || null, 'Station Inspection', 'Elena Rostova initiated diagnostics on Connaught Place Central Superhub.');
+  insertActivity.run(devUser?.id || null, 'Firmware Update', 'Dev Patel completed firmware deployment v4.8 to Connaught Place Central Superhub.');
   insertActivity.run(adminUser?.id || null, 'Employee Update', 'Admin Marcus Vance updated credentials for Dev Patel.');
 
   console.log('--- Seeding Sample Inquiries ---');

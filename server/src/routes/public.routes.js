@@ -21,7 +21,7 @@ router.get('/stations', (req, res) => {
 router.get('/products', (req, res) => {
   try {
     const products = db.prepare(`
-      SELECT id, product_code, name, category, power_rating, price, stock_status, description, specs
+      SELECT id, product_code, name, category, power_rating, price, stock_status, description, specs, image
       FROM products
     `).all();
 
